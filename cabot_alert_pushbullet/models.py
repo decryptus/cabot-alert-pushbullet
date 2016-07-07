@@ -1,4 +1,5 @@
 from django.db import models
+from cabot.cabotapp.alert import AlertPlugin, AlertPluginUserData
 
 from os import environ as env
 
@@ -40,16 +41,17 @@ class PushbulletAlert(AlertPlugin):
               'jenkins_api': settings.JENKINS_API,
           })
           message = Template(pushbullet_template).render(context)
+          title = "{} status update".format(service.name)
           self._send_pushbullet_alert(pushbullet_api_key, title, message)
 
     def _send_pushbullet_alert(self, api_key, title, message):
         resp = requests.post(pushbullet_api_url, data=json.dumps({
             'title': title,
             'body': message,
-            'type': note
+            'type': 'note'
           }), headers={
-            'Access-Token: {}'.format(api_key),
-            'Content-Type: application/json'
+            'Access-Token': api_key,
+            'Content-Type': 'application/json'
           })
 
 class PushbulletAlertUserData(AlertPluginUserData):
