@@ -44,7 +44,7 @@ class PushbulletAlert(AlertPlugin):
 
     def _send_pushbullet_alert(self, api_key, title, message):
         resp = requests.post(pushbullet_api_url, data=json.dumps({
-            'title': title
+            'title': title,
             'body': message,
             'type': note
           }), headers={
